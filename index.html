@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Wniosków i Nakazów - LITRP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Generator Wniosków i Nakazów - LITRP</h1>
+            <img src="twoje_zdjecie.jpg" alt="Zdjęcie" class="profile-picture">
+        </div>
+        <form id="applicationForm">
+            <label for="imie">Imię:</label>
+            <input type="text" id="imie" name="imie" required>
+
+            <label for="nazwisko">Nazwisko:</label>
+            <input type="text" id="nazwisko" name="nazwisko" required>
+
+            <label for="numerSprawy">Numer Sprawy:</label>
+            <input type="text" id="numerSprawy" name="numerSprawy" required>
+
+            <label for="data">Data:</label>
+            <input type="date" id="data" name="data" required>
+
+            <label for="rola">Rola w Postępowaniu:</label>
+            <select id="rola" name="rola" required>
+                <option value="prokurator">Prokurator</option>
+                <option value="sędzia">Sędzia</option>
+                <option value="adwokat">Adwokat</option>
+            </select>
+
+            <label for="oskarzonyImie">Imię Oskarżonego:</label>
+            <input type="text" id="oskarzonyImie" name="oskarzonyImie" required>
+
+            <label for="oskarzonyNazwisko">Nazwisko Oskarżonego:</label>
+            <input type="text" id="oskarzonyNazwisko" name="oskarzonyNazwisko" required>
+
+            <label for="czyn">Czyn Zarzucany:</label>
+            <select id="czynList" onchange="setCustomCzyn()" name="czyn">
+                <option value="">-- Wybierz czyn zarzucany --</option>
+                <option value="Kradzież mienia">Kradzież mienia</option>
+                <option value="Przemoc fizyczna">Przemoc fizyczna</option>
+                <option value="Posiadanie nielegalnych substancji">Posiadanie nielegalnych substancji</option>
+                <!-- Dodaj kolejne do 100 przykładów -->
+            </select>
+            <textarea id="czynCustom" name="czyn" rows="4" placeholder="Lub wpisz własny czyn" oninput="clearCzynList()"></textarea>
+
+            <label for="opis">Opis Nakazu:</label>
+            <textarea id="opis" name="opis" rows="4" placeholder="Opis działań do podjęcia w ramach nakazu"></textarea>
+
+            <button type="button" onclick="generateApplication()">Sprawdź</button>
+            <button type="button" onclick="generateOrder()">Nakaz</button>
+            <button type="button" onclick="generateRequest()">Prośba o Nakaz</button>
+        </form>
+
+        <div id="applicationOutput" class="output"></div>
+    </div>
+
+    <script>
+        function setCustomCzyn() {
+            const czynList = document.getElementById("czynList").value;
+            if (czynList) {
+                document.getElementById("czynCustom").value = czynList;
+            }
+        }
+
+        function clearCzynList() {
+            document.getElementById("czynList").selectedIndex = 0;
+        }
+
+        function generateApplication() {
+            const imie = document.getElementById("imie").value;
+            const nazwisko = document.getElementById("nazwisko").value;
+            const numerSprawy = document.getElementById("numerSprawy").value;
+            const data = document.getElementById("data").value;
+            const rola = document.getElementById("rola").value;
+            const oskarzonyImie = document.getElementById("oskarzonyImie").value;
+            const oskarzonyNazwisko = document.getElementById("oskarzonyNazwisko").value;
+            const czyn = document.getElementById("czynCustom").value;
+
+            const applicationOutput = `
+                <h2>Wniosek Sądowy - LITRP</h2>
+                <img src="twoje_zdjecie.jpg" alt="Zdjęcie" class="output-picture">
+                <p><strong>Imię:</strong> ${imie}</p>
+                <p><strong>Nazwisko:</strong> ${nazwisko}</p>
+                <p><strong>Rola:</strong> ${rola}</p>
+                <p><strong>Numer Sprawy:</strong> ${numerSprawy}</p>
+                <p><strong>Data:</strong> ${data}</p>
+                <p><strong>Oskarżony:</strong> ${oskarzonyImie} ${oskarzonyNazwisko}</p>
+                <p><strong>Czyn Zarzucany:</strong> ${czyn}</p>
+            `;
+
+            document.getElementById("applicationOutput").innerHTML = applicationOutput;
+        }
+
+        function generateOrder() {
+            const imie = document.getElementById("imie").value;
+            const nazwisko = document.getElementById("nazwisko").value;
+            const rola = document.getElementById("rola").value;
+            const oskarzonyImie = document.getElementById("oskarzonyImie").value;
+            const oskarzonyNazwisko = document.getElementById("oskarzonyNazwisko").value;
+            const czyn = document.getElementById("czynCustom").value;
+            const opis = document.getElementById("opis").value;
+
+            const orderOutput = `
+                <h2>Nakaz Sądowy</h2>
+                <img src="twoje_zdjecie.jpg" alt="Zdjęcie" class="output-picture">
+                <p><strong>Wydane przez:</strong> ${rola} ${imie} ${nazwisko}</p>
+                <p><strong>Oskarżony:</strong> ${oskarzonyImie} ${oskarzonyNazwisko}</p>
+                <p><strong>Czyn Zarzucany:</strong> ${czyn}</p>
+                <p><strong>Opis Nakazu:</strong> ${opis}</p>
+            `;
+
+            document.getElementById("applicationOutput").innerHTML = orderOutput;
+        }
+
+        function generateRequest() {
+            const rola = document.getElementById("rola").value;
+            const imie = document.getElementById("imie").value;
+            const nazwisko = document.getElementById("nazwisko").value;
+            const czyn = document.getElementById("czynCustom").value;
+
+            const requestOutput = `
+                <h2>Prośba o Wydanie Nakazu</h2>
+                <p><strong>Proszę:</strong> ${rola} ${imie} ${nazwisko}</p>
+                <p>W związku z zarzutem: <strong>${czyn}</strong>, wnoszę o wydanie nakazu przeszukania.</p>
+            `;
+
+            document.getElementById("applicationOutput").innerHTML = requestOutput;
+        }
+    </script>
+</body>
+</html>
